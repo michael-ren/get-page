@@ -11,6 +11,7 @@
 #                 - index.html
 
 ROBOTS="${ROBOTS:-on}"
+ERR_LEVEL="${ERR_LEVEL:-7}"
 
 
 usage(){
@@ -77,7 +78,11 @@ for PAGE in "$@"; do
 		--adjust-extension \
 		--convert-links \
 		--backup-converted \
-		"$PAGE"
+		"$PAGE" && WGET_ERR=0 || WGET_ERR=$?
+
+	if [ "$WGET_ERR" -le "$ERR_LEVEL" -a "$WGET_ERR" -gt 0 ]; then
+		exit "$WGET_ERR"
+	fi
 
 	if [ -f "$PAGE_DIRECTORY"/index.html ]; then
 		ln -s "$PAGE_DIRECTORY"/index.html index.html
