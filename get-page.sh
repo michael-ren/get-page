@@ -70,6 +70,7 @@ for PAGE in "$@"; do
 	cd "$PAGE_DIRECTORY"
 
 	wget \
+		--no-verbose \
 		--execute robots="$ROBOTS" \
 		--page-requisites \
 		--span-hosts \
