@@ -49,6 +49,16 @@ get_page_directory(){
 	printf '%s' "$PAGE_DIRECTORY"
 }
 
+get_file_extension(){
+	# $1: The file
+	# Output: The file extension
+	FILE="$1"
+
+	EXTENSION="$(printf '%s' "$(basename "$FILE")" | cut -d '.' -f2-)"
+
+	[ -z "$EXTENSION" ] && printf '%s' "$FILE" || printf '%s' "$EXTENSION"
+}
+
 
 OLDPWD="$PWD"
 
@@ -88,6 +98,8 @@ for PAGE in "$@"; do
 		ln -s "$PAGE_DIRECTORY"/index.html index.html
 	elif [ -f "$PAGE_DIRECTORY".html ]; then
 		ln -s "$PAGE_DIRECTORY.html" index.html
+	elif [ -f "$PAGE_DIRECTORY" ]; then
+		ln -s "$PAGE_DIRECTORY" index."$(get_file_extension "$PAGE_DIRECTORY")"
 	else
 		ln -s "$PAGE_DIRECTORY" index.html
 	fi
